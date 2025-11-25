@@ -13,9 +13,9 @@ pipeline {
 
         SCANNER_HOME = tool 'sonar-scanner'
 
-        registryCredential = 'ecr:ap-south-1:awscreds'
-        IMAGE_NAME   = '970378220457.dkr.ecr.ap-south-1.amazonaws.com/flipkartimg'               
-        flipkartRegistry = "https://970378220457.dkr.ecr.ap-south-1.amazonaws.com"
+        registryCredential = 'ecr:us-east-1:awscreds'
+        IMAGE_NAME   = '970378220457.dkr.ecr.us-east-1.amazonaws.com/flipkartimg'               
+        flipkartRegistry = "https://970378220457.dkr.ecr.us-east-1.amazonaws.com"
     }
     
     
@@ -28,7 +28,7 @@ pipeline {
 
         stage("Git Checkout") {
             steps {
-                git branch: 'main', url: 'https://github.com/harishnshetty/Flipkart-Clone-DevSecops-Terraform-EKS-Harbor-Scout-OWASP-ZAP-Gitops-Hard-Level-project.git'
+                git branch: 'main', url: 'https://github.com/ravigfx/Flipkart-Clone-DevSecops-EKS-Scout-OWASP-ZAP-Gitops-Hard-Level-project.git'
             }
         }
 
@@ -80,7 +80,7 @@ pipeline {
         //     steps {
         //         script{
         //              withCredentials([string(credentialsId: 'docker-cred', variable: 'dockerpwd')]) {
-        //                 sh "docker login -u harishnshetty -p ${dockerpwd}"
+        //                 sh "docker login -u ravigfx -p ${dockerpwd}"
         //                sh 'docker-scout quickview fs://.'
         //                sh 'docker-scout cves fs://.'
         //            }
@@ -94,7 +94,7 @@ pipeline {
                     script {
                         withCredentials([string(credentialsId: 'docker-cred', variable: 'dockerpwd')]) {
                             // Login to Docker Hub
-                            sh "docker login -u harishnshetty -p ${dockerpwd}"
+                            sh "docker login -u ravigfx -p ${dockerpwd}"
 
                             // Generate a quick overview and save it as a text file
                             sh "docker-scout quickview fs://. > quickview-report.txt"
@@ -119,7 +119,7 @@ pipeline {
             steps {
                 script {
 
-                    env.IMAGE_TAG = "harishnshetty/flipkart:${BUILD_NUMBER}"
+                    env.IMAGE_TAG = "ravigfx/flipkart:${BUILD_NUMBER}"
                     
                     // Optional cleanup
                     sh "docker rmi -f flipkart ${env.IMAGE_TAG} || true"
@@ -137,7 +137,7 @@ pipeline {
     //         steps {
     //             script{
     //                 withCredentials([string(credentialsId: 'docker-cred', variable: 'dockerpwd')]) {
-    //                 sh "docker login -u harishnshetty -p ${dockerpwd}"
+    //                 sh "docker login -u ravigfx -p ${dockerpwd}"
     //                 sh 'docker-scout cves flipkart'
     //                 sh 'docker-scout recommendations flipkart'
     //             }
@@ -151,7 +151,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'docker-cred', variable: 'dockerpwd')]) {
                         // Login to Docker Hub
-                        sh "docker login -u harishnshetty -p ${dockerpwd}"
+                        sh "docker login -u ravigfx -p ${dockerpwd}"
 
                         // Run Docker Scout CVE scan and save output
                         // sh "docker-scout cves flipkart --format json > image-cves-report.json"
@@ -203,14 +203,14 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'docker-cred', variable: 'dockerpwd')]) {
-                        sh "docker login -u harishnshetty -p ${dockerpwd}"
+                        sh "docker login -u ravigfx -p ${dockerpwd}"
                         sh "docker tag flipkart ${env.IMAGE_TAG}"
                         sh "docker push ${env.IMAGE_TAG}"
 
                         // Also push latest
-                        sh "docker tag flipkart harishnshetty/flipkart:latest"
+                        sh "docker tag flipkart ravigfx/flipkart:latest"
                         
-                        sh "docker push harishnshetty/flipkart:latest"
+                        sh "docker push ravigfx/flipkart:latest"
                         sh "docker logout"
                     }
                 }
@@ -298,7 +298,7 @@ pipeline {
             emailext (
                 subject: "Pipeline ${buildStatus}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                    <p>Youtube Link :- https://www.youtube.com/@devopsHarishNShetty </p>                                     
+                    <p>Youtube Link :- https://www.youtube.com/@devopsravigfx </p>                                     
                     <p>Flipkart DevSecops CICD pipeline status.</p>
                     <p>Project: ${env.JOB_NAME}</p>
                     <p>Build Number: ${env.BUILD_NUMBER}</p>
@@ -306,8 +306,8 @@ pipeline {
                     <p>Started by: ${buildUser}</p>
                     <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
-                to: 'harishn662@gmail.com',
-                from: 'harishn662@gmail.com',
+                to: 'ravigfx420@gmail.com',
+                from: 'ravigfx420@gmail.com',
                 mimeType: 'text/html',
                 attachmentsPattern: 'quickview-report.txt,cves-report.json,cves-report.txt,image-cves-report.json,image-cves-report.txt,image-recommendations.json,image-recommendations.txt,dependency-check-report.xml,zap_report.html,zap_report.json'
                     )  
