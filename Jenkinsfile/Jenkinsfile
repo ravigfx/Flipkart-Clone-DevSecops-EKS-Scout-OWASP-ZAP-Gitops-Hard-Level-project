@@ -14,8 +14,8 @@ pipeline {
         SCANNER_HOME = tool 'sonar-scanner'
 
         registryCredential = 'ecr:us-east-1:awscreds'
-        IMAGE_NAME   = '970378220457.dkr.ecr.us-east-1.amazonaws.com/flipkartimg'               
-        flipkartRegistry = "https://970378220457.dkr.ecr.us-east-1.amazonaws.com"
+        IMAGE_NAME   = '103825649954.dkr.ecr.us-east-1.amazonaws.com/flipkartimg'               
+        flipkartRegistry = "https://103825649954.dkr.ecr.us-east-1.amazonaws.com"
     }
     
     
